@@ -35,3 +35,5 @@ This script install commonly used applications, downloading them from the [Choco
 25. Spotify 
 26. Twitch Studio
 27. Flutter
+
+Applications, such as PHP and Flutter, may be installed in C:\tools
