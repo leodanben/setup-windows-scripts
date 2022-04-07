@@ -8,7 +8,7 @@ Use the Command in Powershell with Administrator priviledges (assuming that you 
 ```
 This script install commonly used applications, downloading them from the [Chocolatey Community Repositories](https://community.chocolatey.org/packages), and then installing them locally. It currently installs the following packages:
 
-1. PHP [Chocolatey Package Info](https://community.chocolatey.org/packages/php) [Software / App Info](https://windows.php.net/)
+1. PHP [[Chocolatey Package Info]](https://community.chocolatey.org/packages/php) [[Software / App Info]](https://windows.php.net/)
 2. VS Code 
 3. JetBrains ToolBox 
 4. JetBrains PhpStorm
