@@ -1,10 +1,34 @@
 # Run This Script Using The Following Command
 # Set-ExecutionPolicy Bypass -Scope Process -Force; .\install-with-chocolatey.ps1
 Workflow Install-Applications{
+    #Test-CommandExists choco
     Install-Chocolatey
-    Enable-WSL
-    Restart-Computer -wait
-    Install-Remaining
+    #Enable-WSL
+    #Restart-Computer -wait
+    #Install-Remaining
+}
+
+function Test-CommandExists{
+    Param($command)
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'stop'
+    $return = $false
+
+    try {
+        if(Get-Command $command){
+            $return = $true
+        }
+    }
+
+    Catch {
+        $return = $false
+    }
+
+    Finally {
+        $ErrorActionPreference=$oldPreference
+    }
+    return $return
+
 }
 
 Workflow Install-Remaining{
@@ -27,10 +51,12 @@ Workflow Install-Remaining{
     }
 }
 
-Workflow Install-Chocolatey{
-    Sequence{
+function Install-Chocolatey{
+    if(-not(Test-CommandExists choco){
         # Install Chocolatey
-        # Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        Set-ExecutionPolicy Bypass -Scope Process -Force; 
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
     }
 }
 
@@ -39,8 +65,8 @@ Workflow Enable-WSL{
         # Setup WSL2
         dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
         dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-        wsl --set-default-version 2
         choco install wsl2
+        wsl --set-default-version 2
     }
 }
 
